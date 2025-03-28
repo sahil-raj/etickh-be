@@ -1,0 +1,33 @@
+{
+  "name": "etickh-be",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/sahil-raj/etickh-be#readme",
+  "bugs": {
+    "url": "https://github.com/sahil-raj/etickh-be/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahil-raj/etickh-be.git"
+  },
+  "license": "MIT",
+  "author": "gm@sahilraj.xyz",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
