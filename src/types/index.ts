@@ -1,4 +1,4 @@
-export interface CreateJWTPayload {
-  userId: String;
-  evmAddress: String;
-}
+export type CreateJWTPayload = {
+  userId: string;
+  evmAddress: string;
+};
