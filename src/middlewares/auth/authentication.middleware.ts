@@ -1,19 +1,19 @@
-import { NextFunction, Response } from "express";
+import { NextFunction, Response, Request } from "express";
 import { verifyJWT, generateJWT } from "../../utils/jwt/jwt";
 import { PRIVY_SIGNING_KEY, PRIVY_APP_ID } from "../../config/constants/env";
 import prisma from "../../utils/prisma/prismaClient";
-import { CreateJWTPayload, CustomRequest } from "../../types";
+import { CreateJWTPayload } from "../../types";
 
 /**
  * This middleware function is used to authenticate the user by verifying the JWT token.
  * Checks for Authentication from privy and then issues a JWT which is time-bound and must be sent with each request which requires authentication.
- * @param {CustomRequest} req request object
+ * @param {Request} req request object
  * @param {Response} res response object
  * @param {NextFunction} next next function
  */
 
 const authenticationMiddleware = async (
-  req: CustomRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
@@ -108,6 +108,7 @@ const authenticationMiddleware = async (
           res
             .status(401)
             .json({ message: "Unauthorized", error: "User not found" });
+          return;
         }
       } else {
         res.status(401).json({
@@ -169,17 +170,10 @@ const authenticationMiddleware = async (
     }
 
     //set user in the request object
-    req.user = user;
 
     //pass on to next middleware if authentication is completed
     next();
-    return;
   }
-
-  res.status(500).json({
-    error: "Internal server error",
-    message: "Unexpected error occured during authentication",
-  });
 };
 
 export default authenticationMiddleware;
