@@ -1,5 +1,10 @@
 // utility functions to sign, create and verify JWT tokens
-import { sign, verify, VerifyOptions } from "jsonwebtoken";
+import {
+  sign,
+  TokenExpiredError,
+  verify,
+  type VerifyOptions,
+} from "jsonwebtoken";
 import { JWT_SECRET_KEY } from "../../config/constants/env";
 import { CreateJWTPayload } from "../../types";
 
@@ -30,15 +35,17 @@ export const generateJWT = (
  */
 export const verifyJWT = (
   token: string,
-  options: VerifyOptions,
-  key = JWT_SECRET_KEY
-): CreateJWTPayload | null => {
+  key: string = JWT_SECRET_KEY,
+  options?: VerifyOptions
+): CreateJWTPayload | null | "expired" => {
   try {
     //verify the token with the secret key
     const decoded = verify(token, key, options) as CreateJWTPayload;
     //return the decoded payload
     return decoded;
   } catch (error) {
+    //check if the token expired
+    if (error instanceof TokenExpiredError) return "expired";
     //if verification fails return null
     return null;
   }
