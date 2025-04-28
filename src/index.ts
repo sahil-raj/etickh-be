@@ -10,6 +10,9 @@ import authRouter from "./routes/auth/authRouter";
 
 const app = express();
 
+// use json
+app.use(express.json());
+
 app.use("/auth", authenticationMiddleware, ratelimit, authRouter);
 
 app.listen(PORT, () => {
