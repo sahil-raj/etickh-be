@@ -3,6 +3,7 @@ import { verifyJWT, generateJWT } from "../../utils/jwt/jwt";
 import { PRIVY_SIGNING_KEY, PRIVY_APP_ID } from "../../config/constants/env";
 import prisma from "../../utils/prisma/prismaClient";
 import { CreateJWTPayload } from "../../types";
+import { createAndStoreWallet } from "../../utils/wallet/walletFunctions";
 
 /**
  * This middleware function is used to authenticate the user by verifying the JWT token.
@@ -170,7 +171,11 @@ const authenticationMiddleware = async (
         return;
       }
 
-      //set user in the request object
+      //get user's custodial wallet
+      const custodialAddress = await createAndStoreWallet(user?.evm_address);
+
+      //set user in the response object
+      res.locals.user = { ...user, custodialAddress };
 
       //pass on to next middleware if authentication is completed
       next();
