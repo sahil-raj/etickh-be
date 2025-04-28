@@ -1,12 +1,11 @@
 import { Router, Request, Response } from "express";
-import prisma from "../../utils/prisma/prismaClient";
 import { createUser } from "../../controllers/authRoutes.controller";
 
 const authRouter = Router();
 
-authRouter.post("/test", async (req: Request, res: Response) => {
-  const users = await prisma.user_account.findMany();
-  res.status(200).json(users);
+// authentication
+authRouter.post("/", async (req: Request, res: Response) => {
+  res.status(200).json(res.locals.user);
 });
 
 // create a new user

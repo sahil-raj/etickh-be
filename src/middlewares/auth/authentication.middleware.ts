@@ -21,7 +21,7 @@ const authenticationMiddleware = async (
   const authToken: string = req.headers.authorization as string;
   const privyToken: string = req.headers["x-privy-jwt"] as string;
 
-  if (req.url !== "/create") {
+  if (req.originalUrl !== "/auth/create") {
     //check if the authorization or privy auth header is present
     if (!(privyToken || authToken)) {
       res
