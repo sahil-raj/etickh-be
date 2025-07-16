@@ -19,7 +19,7 @@ export const generateJWT = (
   //check if the evm address is of specified length or else return null
   if (createJWTPayload && createJWTPayload.evmAddress.length == 42) {
     //sign the payload with the secret key and set the expiration time to 5 minutes
-    return sign({ ...createJWTPayload }, JWT_SECRET_KEY, { expiresIn: "5m" });
+    return sign({ ...createJWTPayload }, JWT_SECRET_KEY, { expiresIn: "50m" });
   } else {
     //if the payload is not valid return null
     return null;
