@@ -1,0 +1,6 @@
+[submodule "ETickH-contracts"]
+	path = ETickH-contracts
+	url = https://github.com/sahil-raj/ETickH-contracts.git
+[submodule "etickh-fe"]
+	path = etickh-fe
+	url = https://github.com/sahil-raj/etickh-fe.git
