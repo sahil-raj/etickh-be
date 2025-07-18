@@ -19,7 +19,7 @@ export const generateJWT = (
   //check if the evm address is of specified length or else return null
   if (createJWTPayload && createJWTPayload.evmAddress.length == 42) {
     //sign the payload with the secret key and set the expiration time to 5 minutes
-    return sign({ ...createJWTPayload }, JWT_SECRET_KEY, { expiresIn: "50m" });
+    return sign({ ...createJWTPayload }, JWT_SECRET_KEY, { expiresIn: "5m" });
   } else {
     //if the payload is not valid return null
     return null;
@@ -29,8 +29,8 @@ export const generateJWT = (
 /**
  * Verify the JWT token and return the decoded payload
  * @param {string} token - The JWT token to verify
- * @param {VerifyOptions} options - The options for verifying the token as provided by verify function of jsonwebtoken
  * @param {string} key - The key to verify the JWT
+ * @param {VerifyOptions} options - The options for verifying the token as provided by verify function of jsonwebtoken
  * @returns {CreateJWTPayload | null} The decoded payload or null if verification fails
  */
 export const verifyJWT = (
