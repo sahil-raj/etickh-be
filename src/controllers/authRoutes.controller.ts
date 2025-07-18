@@ -22,8 +22,24 @@ export const createUser = async (req: Request, res: Response) => {
   }
 
   try {
+    // check if user already exists or not
+    let user = await prisma.user_account.findUnique({
+      where: {
+        sub: res.locals?.userSub,
+      },
+    });
+
+    if (user) {
+      // if the user already exists throw an conflict
+      res.status(409).json({
+        message: "Conflict",
+        error: `User with sub ${res.locals?.userSub} already exists, cross check evmAddress.`,
+      });
+      return;
+    }
+
     // create the user with evm address
-    const user = await prisma.user_account.create({
+    user = await prisma.user_account.create({
       data: {
         evm_address: req.body?.evmAddress,
         sub: res.locals?.userSub,

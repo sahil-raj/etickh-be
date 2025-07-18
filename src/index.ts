@@ -2,7 +2,7 @@ import express from "express";
 import { PORT } from "./config/constants/env";
 
 //middlewares
-import authenticationMiddleware from "./middlewares/auth/authentication.middleware";
+import authenticationMiddlewareV2 from "./middlewares/auth/authenticationV2.middleware";
 import ratelimit from "./middlewares/ratelimit/ratelimit";
 
 //routers
@@ -14,7 +14,7 @@ const app = express();
 // use json
 app.use(express.json());
 
-app.use("/auth", authenticationMiddleware, ratelimit, authRouter);
+app.use("/auth", authenticationMiddlewareV2, ratelimit, authRouter);
 
 app.use("/events", ratelimit, eventRouter);
 
