@@ -1,12 +1,13 @@
 import { Router, Request, Response } from "express";
-import { createUser } from "../../controllers/authRoutes.controller";
+import {
+  createAuthToken,
+  createUser,
+} from "../../controllers/authRoutes.controller";
 
 const authRouter = Router();
 
 // authentication
-authRouter.post("/", async (req: Request, res: Response) => {
-  res.status(200).json(res.locals.user);
-});
+authRouter.post("/", createAuthToken);
 
 // create a new user
 authRouter.post("/create", createUser);

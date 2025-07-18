@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import prisma from "../utils/prisma/prismaClient";
 import { createAndStoreWallet } from "../utils/wallet/walletFunctions";
 import { isAddress } from "viem";
+import { CreateJWTPayload } from "../types";
+import { generateJWT, verifyJWT } from "../utils/jwt/jwt";
+import { PRIVY_SIGNING_KEY, PRIVY_APP_ID } from "../config/constants/env";
 
 /**
  * create a new user using the data provided in body
@@ -40,6 +43,50 @@ export const createUser = async (req: Request, res: Response) => {
     return;
   } catch (e) {
     res.status(500).json({ message: "Internal Server Error", error: e });
+    return;
+  }
+};
+
+/**
+ * create authToken for the user on the basis of res.locals.user (as set by the auth middleware)
+ * @param {Request} req request object
+ * @param {Response} res response object
+ */
+export const createAuthToken = (req: Request, res: Response) => {
+  const privyToken: string = req.headers["x-privy-jwt"] as string;
+  const decodedToken: CreateJWTPayload | null | "expired" = verifyJWT(
+    privyToken.split(" ")[1],
+    PRIVY_SIGNING_KEY.replace(/\\n/g, "\n"),
+    {
+      issuer: "privy.io",
+      audience: PRIVY_APP_ID,
+    }
+  );
+  const user = res.locals.user;
+
+  // following condition will always be true as it is already checked in the auth middleware
+  if (decodedToken && decodedToken != "expired" && user) {
+    // if the user is found then generate a token to return
+    //include user-agent and timestamp so that token cannot be used from other user-agents
+    const timestamp = Date.now();
+    const returnToken = generateJWT({
+      userId: user?.id as unknown as string,
+      evmAddress: user?.evm_address,
+      sub: user?.sub as string,
+      userAgent: req.headers["user-agent"],
+      timestamp,
+    });
+    res.status(200).json({
+      message: "ACCESS_TOKEN_CREATED",
+      tokenDetails: {
+        accessToken: `Bearer ${returnToken}`,
+        timestamp,
+        userAgent: req.headers["user-agent"],
+      },
+    });
+    return;
+  } else {
+    res.status(500).json({});
     return;
   }
 };

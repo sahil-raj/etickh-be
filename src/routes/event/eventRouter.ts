@@ -1,5 +1,5 @@
 import { Router } from "express";
-import authenticationMiddleware from "../../middlewares/auth/authentication.middleware";
+import authenticationMiddlewareV2 from "../../middlewares/auth/authenticationV2.middleware";
 import { createEvent } from "../../controllers/eventRoutes.controller";
 
 const eventRouter = Router();
@@ -8,6 +8,6 @@ const eventRouter = Router();
 // eventRouter.get("/", );
 
 // create event
-eventRouter.post("/create", authenticationMiddleware, createEvent);
+eventRouter.post("/create", authenticationMiddlewareV2, createEvent);
 
 export default eventRouter;
